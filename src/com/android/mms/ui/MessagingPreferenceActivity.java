@@ -258,6 +258,7 @@ public class MessagingPreferenceActivity extends PreferenceActivity
         mMmsLimitPref = findPreference("pref_key_mms_delete_limit");
         mClearHistoryPref = findPreference("pref_key_mms_clear_history");
         mEnableNotificationsPref = (CheckBoxPreference) findPreference(NOTIFICATION_ENABLED);
+        mMmsAutoEnableDataPref = (CheckBoxPreference) findPreference(AUTO_ENABLE_DATA);
         mMmsAutoRetrievialPref = (CheckBoxPreference) findPreference(AUTO_RETRIEVAL);
         mEnablePrivacyModePref = (CheckBoxPreference) findPreference(PRIVACY_MODE_ENABLED);
         mEnableHeadsUpModePref = (CheckBoxPreference) findPreference(HEADS_UP_MODE_ENABLED);
