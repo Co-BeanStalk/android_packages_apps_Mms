@@ -69,7 +69,6 @@ public class MessagingPreferenceActivity extends PreferenceActivity
     public static final String NOTIFICATION_VIBRATE     = "pref_key_vibrate";
     public static final String NOTIFICATION_VIBRATE_WHEN= "pref_key_vibrateWhen";
     public static final String NOTIFICATION_RINGTONE    = "pref_key_ringtone";
-    public static final String AUTO_ENABLE_DATA         = "pref_key_mms_auto_enable_data";
     public static final String AUTO_RETRIEVAL           = "pref_key_mms_auto_retrieval";
     public static final String RETRIEVAL_DURING_ROAMING = "pref_key_mms_retrieval_during_roaming";
     public static final String AUTO_DELETE              = "pref_key_auto_delete";
@@ -153,9 +152,8 @@ public class MessagingPreferenceActivity extends PreferenceActivity
     private CheckBoxPreference mVibratePref;
     private CheckBoxPreference mEnableNotificationsPref;
     private CheckBoxPreference mEnablePrivacyModePref;
-    private CheckBoxPreference mEnableHeadsUpModePref;
     private CheckBoxPreference mMmsAutoRetrievialPref;
-    private CheckBoxPreference mMmsAutoEnableDataPref;
+    private CheckBoxPreference mEnableHeadsUpModePref;
     private RingtonePreference mRingtonePref;
     private Recycler mSmsRecycler;
     private Recycler mMmsRecycler;
@@ -263,7 +261,6 @@ public class MessagingPreferenceActivity extends PreferenceActivity
         mMmsLimitPref = findPreference("pref_key_mms_delete_limit");
         mClearHistoryPref = findPreference("pref_key_mms_clear_history");
         mEnableNotificationsPref = (CheckBoxPreference) findPreference(NOTIFICATION_ENABLED);
-        mMmsAutoEnableDataPref = (CheckBoxPreference) findPreference(AUTO_ENABLE_DATA);
         mMmsAutoRetrievialPref = (CheckBoxPreference) findPreference(AUTO_RETRIEVAL);
         mEnablePrivacyModePref = (CheckBoxPreference) findPreference(PRIVACY_MODE_ENABLED);
         mEnableHeadsUpModePref = (CheckBoxPreference) findPreference(HEADS_UP_MODE_ENABLED);
@@ -601,10 +598,6 @@ public class MessagingPreferenceActivity extends PreferenceActivity
 
         } else if (preference == mMmsAutoRetrievialPref) {
             if (mMmsAutoRetrievialPref.isChecked()) {
-                startMmsDownload();
-            }
-        } else if (preference == mMmsAutoEnableDataPref) {
-            if (mMmsAutoEnableDataPref.isChecked()) {
                 startMmsDownload();
             }
         }

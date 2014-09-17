@@ -260,10 +260,6 @@
     <!-- Failed to open associated activity -->
     <string name="failed_open_associated_activity_msg">Failed to open associated activity</string>
     
-    <!-- MMS push permission -->
-    <string name="label_mms_push">MMS Push</string>
-    <string name="desc_mms_push">Pushes MMS from outbox to the network</string>
-    
     <!-- Custom user-agent -->
     <string name="pref_mms_ua_default_android">Default Android</string>
     <string name="pref_mms_ua_nokia_n95">Nokia N95</string>
@@ -278,12 +274,6 @@
     <string name="pref_summary_mms_user_agent">Spoof phone as a different model for MMS</string>
     <string name="pref_mms_user_agent_custom_set">Custom User Agent set to:\n</string>
     
-    <!-- Settings item for boolean option to auto -enable data for MMS messages -->
-    <string name="pref_title_mms_auto_enable_data">Auto-enable data</string>
-    
-    <!-- Settings item description for boolean auto-enable data for MMS option -->
-    <string name="pref_summary_mms_auto_enable_data">Automatically enable mobile data for MMS messages</string>
-
     <!-- Enable emojis -->
     <string name="pref_title_enable_emojis">Emoji support</string>
     <string name="pref_summary_enable_emojis">Enable support for unicode emojis, a set of 471 nice emoticons</string>

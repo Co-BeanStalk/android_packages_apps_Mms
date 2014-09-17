@@ -20,18 +20,14 @@ package com.android.mms.transaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.provider.Telephony.Mms;
 import android.util.Log;
 
 import com.android.mms.LogTag;
 import com.android.mms.MmsApp;
-import com.android.mms.ui.MessagingPreferenceActivity;
 
 /**
  * MmsSystemEventReceiver receives the
@@ -47,7 +43,6 @@ import com.android.mms.ui.MessagingPreferenceActivity;
 public class MmsSystemEventReceiver extends BroadcastReceiver {
     private static final String TAG = "MmsSystemEventReceiver";
     private static ConnectivityManager mConnMgr = null;
-    private Context mContext;
 
     public static void wakeUpService(Context context) {
         if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
@@ -59,11 +54,6 @@ public class MmsSystemEventReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        mContext = context;
-        if (mConnMgr == null) {
-            mConnMgr = (ConnectivityManager) context
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-        }
         if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
             Log.v(TAG, "Intent received: " + intent);
         }
@@ -73,17 +63,18 @@ public class MmsSystemEventReceiver extends BroadcastReceiver {
             Uri changed = (Uri) intent.getParcelableExtra(Mms.Intents.DELETED_CONTENTS);
             MmsApp.getApplication().getPduLoaderManager().removePdu(changed);
         } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-            if (!isNetworkAvailable()) {
+            if (mConnMgr == null) {
+                mConnMgr = (ConnectivityManager) context
+                        .getSystemService(Context.CONNECTIVITY_SERVICE);
+            }
+            if (!mConnMgr.getMobileDataEnabled()) {
                 if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
-                    Log.v(TAG, "mobile data unavailable, bailing");
+                    Log.v(TAG, "mobile data turned off, bailing");
                 }
                 return;
             }
             NetworkInfo mmsNetworkInfo = mConnMgr
                     .getNetworkInfo(ConnectivityManager.TYPE_MOBILE_MMS);
-            if (mmsNetworkInfo == null) {
-                return;
-            }
             boolean available = mmsNetworkInfo.isAvailable();
             boolean isConnected = mmsNetworkInfo.isConnected();
 
@@ -93,7 +84,7 @@ public class MmsSystemEventReceiver extends BroadcastReceiver {
             }
 
             // Wake up transact service when MMS data is available and isn't connected.
-            if (isNetworkAvailable() && !isConnected) {
+            if (available && !isConnected) {
                 wakeUpService(context);
             }
         } else if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
@@ -106,42 +97,6 @@ public class MmsSystemEventReceiver extends BroadcastReceiver {
             // Scan and send pending Mms once after boot completed since
             // ACTION_ANY_DATA_CONNECTION_STATE_CHANGED wasn't registered in a whole life cycle
             wakeUpService(context);
-        } else if (action.equals(Intent.ACTION_AIRPLANE_MODE_CHANGED)) {
-            // Wake up transact service upon leaving airplane mode if auto-enable data
-            if (isAutoEnableData() && !isAirplaneModeOn()) {
-                wakeUpService(context);
-            }
         }
-    }
-
-    private boolean isAutoEnableData() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean result = prefs.getBoolean(MessagingPreferenceActivity.AUTO_ENABLE_DATA, false);
-        Log.d(TAG, "isAutoEnableData=" + result);
-        return result;
-    }
-
-    private boolean isAirplaneModeOn() {
-        boolean result = Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
-        Log.d(TAG, "isAirplaneModeOn=" + result);
-        return result;
-    }
-
-    private boolean isNetworkAvailable() {
-        boolean result = false;
-        if (mConnMgr == null) {
-            result = false;
-        } else {
-            if (mConnMgr.getMobileDataEnabled()) {
-                NetworkInfo ni = mConnMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE_MMS);
-                result = (ni == null ? false : ni.isAvailable());
-            } else {
-                // we can auto-enable data, so report available
-                result = !isAirplaneModeOn() && isAutoEnableData();
-            }
-        }
-        Log.d(TAG, "isNetworkAvailable=" + result);
-        return result;
     }
 }

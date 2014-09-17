@@ -27,7 +27,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SqliteWrapper;
 import android.net.ConnectivityManager;
@@ -39,9 +38,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
-import android.os.SystemProperties;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.provider.Telephony.Mms;
 import android.provider.Telephony.MmsSms;
 import android.provider.Telephony.Mms.Sent;
@@ -55,7 +51,6 @@ import com.android.internal.telephony.PhoneConstants;
 import com.android.mms.LogTag;
 import com.android.mms.MmsConfig;
 import com.android.mms.R;
-import com.android.mms.ui.MessagingPreferenceActivity;
 import com.android.mms.util.DownloadManager;
 import com.android.mms.util.RateController;
 import com.google.android.mms.pdu.GenericPdu;
@@ -153,9 +148,6 @@ public class TransactionService extends Service implements Observer {
 
     private PowerManager.WakeLock mWakeLock;
 
-    // Indicates mobile data was enabled automatically by MMS
-    private boolean mDataEnabledByAuto = false;
-
     public Handler mToastHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -209,14 +201,20 @@ public class TransactionService extends Service implements Observer {
     }
 
     public void onNewIntent(Intent intent, int serviceId) {
-        Log.d(TAG, "onNewIntent: serviceId: " + serviceId + ": " + intent.getExtras() +
-                " intent=" + intent);
-        boolean noNetwork = !isNetworkAvailable();
         mConnMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (noNetwork || !MmsConfig.isSmsEnabled(getApplicationContext())) {
+        if (mConnMgr == null || !mConnMgr.getMobileDataEnabled()
+                || !MmsConfig.isSmsEnabled(getApplicationContext())) {
             endMmsConnectivity();
             stopSelf(serviceId);
             return;
+        }
+        NetworkInfo ni = mConnMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE_MMS);
+        boolean noNetwork = ni == null || !ni.isAvailable();
+
+        if (Log.isLoggable(LogTag.TRANSACTION, Log.VERBOSE)) {
+            Log.v(TAG, "onNewIntent: serviceId: " + serviceId + ": " + intent.getExtras() +
+                    " intent=" + intent);
+            Log.v(TAG, "    networkAvailable=" + !noNetwork);
         }
 
         String action = intent.getAction();
@@ -345,39 +343,7 @@ public class TransactionService extends Service implements Observer {
     }
 
     private static boolean isTransientFailure(int type) {
-        return type >= MmsSms.NO_ERROR && type < MmsSms.ERR_TYPE_GENERIC_PERMANENT;
-    }
-
-    private boolean isAutoEnableData() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
-                getApplicationContext());
-        boolean result = prefs.getBoolean(MessagingPreferenceActivity.AUTO_ENABLE_DATA, false);
-        Log.d(TAG, "isAutoEnableData=" + result);
-        return result;
-    }
-
-    private boolean isAirplaneModeOn() {
-        boolean result = Settings.Global.getInt(getApplicationContext().getContentResolver(),
-                Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
-        Log.d(TAG, "isAirplaneModeOn=" + result);
-        return result;
-    }
-
-    private boolean isNetworkAvailable() {
-        boolean result = false;
-        if (mConnMgr == null) {
-            result = false;
-        } else {
-            if (mConnMgr.getMobileDataEnabled()) {
-                NetworkInfo ni = mConnMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE_MMS);
-                result = (ni == null ? false : ni.isAvailable());
-            } else {
-                // we can auto-enable data, so report available
-                result = !isAirplaneModeOn() && isAutoEnableData();
-            }
-        }
-        Log.d(TAG, "isNetworkAvailable=" + result);
-        return result;
+        return type > MmsSms.NO_ERROR && type < MmsSms.ERR_TYPE_GENERIC_PERMANENT;
     }
 
     private int getTransactionType(int msgType) {
@@ -569,19 +535,6 @@ public class TransactionService extends Service implements Observer {
         // Take a wake lock so we don't fall asleep before the message is downloaded.
         createWakeLock();
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
-                getApplicationContext());
-        boolean autoEnableData = prefs.getBoolean(
-                MessagingPreferenceActivity.AUTO_ENABLE_DATA, false);
-
-        if (!mConnMgr.getMobileDataEnabled() && autoEnableData) {
-            Log.d(TAG, "autoEnableData: enabling mobile data");
-            mDataEnabledByAuto = true;
-            mConnMgr.setMobileDataEnabled(true);
-        } else if (!autoEnableData) {
-            mDataEnabledByAuto = false;
-        }
-
         int result = mConnMgr.startUsingNetworkFeature(
                 ConnectivityManager.TYPE_MOBILE, Phone.FEATURE_ENABLE_MMS);
 
@@ -605,25 +558,12 @@ public class TransactionService extends Service implements Observer {
                 Log.v(TAG, "endMmsConnectivity");
             }
 
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(
-                    getApplicationContext());
-            boolean autoEnableData = prefs.getBoolean(
-                    MessagingPreferenceActivity.AUTO_ENABLE_DATA, false);
-
             // cancel timer for renewal of lease
             mServiceHandler.removeMessages(EVENT_CONTINUE_MMS_CONNECTIVITY);
             if (mConnMgr != null) {
                 mConnMgr.stopUsingNetworkFeature(
                         ConnectivityManager.TYPE_MOBILE,
                         Phone.FEATURE_ENABLE_MMS);
-                if (mConnMgr.getMobileDataEnabled()
-                        && autoEnableData && mDataEnabledByAuto) {
-                    Log.d(TAG, "autoEnableData: disabling mobile data");
-                    mDataEnabledByAuto = false;
-                    mConnMgr.setMobileDataEnabled(false);
-                } else if (!autoEnableData) {
-                    mDataEnabledByAuto = false;
-                }
             }
         } finally {
             releaseWakeLock();
