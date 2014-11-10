@@ -3842,6 +3842,9 @@ public class ComposeMessageActivity extends Activity
             intent.putExtra(SelectRecipientsList.EXTRA_RECIPIENTS, contacts.getNumbers());
             startActivityForResult(intent, REQUEST_CODE_ADD_RECIPIENTS);
         }
+        else if((v == mQuickEmoji)) {
+            showEmojiDialog();
+        }		
     }
 
     private void launchMultiplePhonePicker() {
@@ -3860,9 +3863,6 @@ public class ComposeMessageActivity extends Activity
         }
         if (urisCount > 0) {
             intent.putExtra(Intents.EXTRA_PHONE_URIS, uris);
-        }
-        else if((v == mQuickEmoji)) {
-            showEmojiDialog();
         }
         startActivityForResult(intent, REQUEST_CODE_PICK);
     }

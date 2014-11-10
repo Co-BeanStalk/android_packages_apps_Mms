@@ -58,7 +58,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.internal.telephony.MSimConstants;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.mms.LogTag;
 import com.android.mms.MmsConfig;
@@ -488,13 +487,6 @@ public class SmsReceiverService extends Service {
         if (cbMessage == null) {
             return;
         }
-        boolean isMSim = MSimTelephonyManager.getDefault().isMultiSimEnabled();
-        String country = "";
-        if (isMSim) {
-            country = MSimTelephonyManager.getDefault().getSimCountryIso(cbMessage.getSubId());
-        } else {
-            country = TelephonyManager.getDefault().getSimCountryIso();
-        }
         int serviceCategory = cbMessage.getServiceCategory();
         if ("in".equals(country) && (serviceCategory == CB_CHANNEL_50 ||
                 serviceCategory == CB_CHANNEL_60)) {
@@ -734,7 +726,6 @@ public class SmsReceiverService extends Service {
         // Store the broadcast message in the content provider.
         ContentValues values = new ContentValues();
         values.put(Sms.ERROR_CODE, error);
-        values.put(Sms.SUB_ID, sms.getSubId());
 
         // CB messages are concatenated by telephony framework into a single
         // message in intent, so grab the body directly.
