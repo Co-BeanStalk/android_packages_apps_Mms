@@ -268,7 +268,7 @@
         </receiver>
 
         <!-- Require the sender to have this permission to prevent third party spoofing -->
-        <receiver android:name=".transaction.PrivilegedCbReceiver"
+        <receiver android:name=".transaction.PrivilegedSmsReceiver"
             android:permission="android.permission.RECEIVE_EMERGENCY_BROADCAST">
             <intent-filter>
                 <action android:name="android.cellbroadcastreceiver.CB_AREA_INFO_RECEIVED" />
