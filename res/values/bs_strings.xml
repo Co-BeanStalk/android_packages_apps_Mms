@@ -223,15 +223,10 @@
     <string name="widget_subject_text_color">Subject text</string>
     <string name="widget_date_text_color">Date text</string>
 
-    <!-- Multi recipients -->
-    <string name="select_recipients">Select recipients</string>
+    <string name="add_recipients">Add recipients</string>
     <string name="groups_header">Groups</string>
-    <string name="no_recipients">No contacts found</string>
-    <string name="no_recipients_mobile_only">No matching contacts found. Try without the \'Mobile numbers only\' filter</string>
-    <string name="menu_done">Done</string>
-    <string name="menu_mobile">Mobile numbers only</string>
-    <string name="menu_groups">Show groups</string>
-
+    <string name="no_recipients">No contacts</string>
+    <string name="hint_findContacts">Find contacts</string>
 
     <!-- Vibrate pattern -->
     <string name="pref_title_mms_notification_vibrate_pattern">Vibrate pattern</string>
