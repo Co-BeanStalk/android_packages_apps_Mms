@@ -32,7 +32,7 @@
             android:title="@string/custom_image_title"
             android:summary="@string/custom_image_summary" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="conversation_list_background"
             android:title="@string/main_bg"
             android:defaultValue="@color/default_conv_list_background"
@@ -46,7 +46,7 @@
         android:key="pref_conversation_list_read"
         android:title="@string/conversation_list_read">
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_read_bg"
             android:title="@string/background"
             android:defaultValue="@color/default_read_bg"
@@ -54,7 +54,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_read_contact"
             android:title="@string/contact"
             android:defaultValue="@color/default_read_contact"
@@ -62,7 +62,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_read_subject"
             android:title="@string/subject"
             android:defaultValue="@color/default_read_subject"
@@ -70,7 +70,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_read_date"
             android:title="@string/date"
             android:defaultValue="@color/default_read_date"
@@ -78,7 +78,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_read_count"
             android:title="@string/message_count"
             android:defaultValue="@color/default_read_count"

@@ -76,7 +76,7 @@
             android:title="@string/custom_image_title"
             android:summary="@string/custom_image_summary" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_message_bg"
             android:title="@string/main_bg"
             android:defaultValue="@color/default_message_background"
@@ -90,7 +90,7 @@
         android:key="pref_recv_text"
         android:title="@string/recv_text_header">
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_recv_text_bg"
             android:title="@string/message_background"
             android:defaultValue="@color/default_recv_text_bg"
@@ -98,7 +98,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_recv_contact_color"
             android:dependency="pref_use_contact"
             android:title="@string/contact_color"
@@ -107,7 +107,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_recv_textcolor"
             android:title="@string/text_color"
             android:defaultValue="@color/default_recv_textcolor"
@@ -115,7 +115,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_recv_date_color"
             android:title="@string/date_color"
             android:defaultValue="@color/default_recv_datecolor"
@@ -129,7 +129,7 @@
         android:key="pref_sent_text"
         android:title="@string/sent_text_header">
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_sent_text_bg"
             android:title="@string/message_background"
             android:defaultValue="@color/default_sent_text_bg"
@@ -137,7 +137,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_sent_contact_color"
             android:dependency="pref_use_contact"
             android:title="@string/contact_color"
@@ -146,7 +146,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+       <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_sent_textcolor"
             android:title="@string/text_color"
             android:defaultValue="@color/default_sent_textcolor"
@@ -154,7 +154,7 @@
             android:inputEnabled="false"
             android:alphaSlider="true" />
 
-        <ColorPickerPreference
+        <net.margaritov.preference.colorpicker.ColorPickerPreference
             android:key="pref_sent_date_color"
             android:title="@string/date_color"
             android:defaultValue="@color/default_sent_datecolor"

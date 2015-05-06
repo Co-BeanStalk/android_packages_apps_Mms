@@ -290,4 +290,49 @@
     <string name="pref_title_enable_softbank_encoding">SoftBank emoji</string>
     <string name="pref_summary_enable_softbank_encoding">Use SoftBank emoji encoding</string>
 
+    <!-- General strings -->
+    <string name="ok">OK</string>
+    <string name="reset">Reset</string>
+    <string name="add">Add</string>
+    <string name="help">Help</string>
+    <string name="reset_android">Android</string>
+    <string name="dialog_restart">Restart</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="reset_bliss">Bliss</string>
+    <string name="attention">Attention</string>
+    <string name="enabled">Enabled</string>
+    <string name="default_string">Default</string>
+    <string name="more_string">More</string>
+    <string name="options_title">Options</string>
+    <string name="color_title">Color</string>
+    <string name="colors_title">Colors</string>
+    <string name="category_colors_title">Customize colors</string>
+    <string name="icon_title">Icon</string>
+    <string name="icons_title">Icons</string>
+    <string name="text_title">Text</string>
+    <string name="background_title">Background</string>
+    <string name="icon_title">Icon</string>
+    <string name="reset_message">Reset all entries to default?</string>
+    <string name="reset_option_message">Reset values to\nAndroid- or Bliss default?</string>
+    <string name="category_general_title">General options</string>
+    <string name="dlg_reset_values_message">Reset values to\nAndroid- or Bliss default?</string>
+    <string name="dlg_reset_android">Android</string>
+    <string name="dlg_reset_bliss">Bliss</string>
+    <string name="reset_default_message">Reset default?</string>
+    <string name="additional_options_title">Additional options</string>
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker_title">Color Picker</string>
+    <string name="press_color_to_apply">Press on color below to apply</string>
+    <string name="palette_bliss_title">Bliss</string>
+    <string name="palette_material_title">Material</string>
+    <string name="palette_rgb_title">RGB</string>
+    <string name="reset_android_title">Android default</string>
+    <string name="reset_bliss_title">Bliss default</string>
+    <string name="arrow_right">→</string>
+    <string name="arrow_down">↓</string>
+    <string name="hex">Hex:</string>
+    <string name="hex_hint">#ff000000</string>
+    <string name="set">Set</string>
+
 </resources>
